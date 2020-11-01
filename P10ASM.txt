@@ -1,0 +1,32 @@
+;practica numero 10
+UNO:	EQU	1
+DOS:	EQU	$2
+;ejemplo numero 1
+TRES:	EQU	3
+DOS:	EQU	$2
+	ORG	0
+;inicia el codigo
+CUA:	EQU	4
+CIN:	DS.B	1
+	CPD	1
+	CPD	10325
+SEIS:	CPD	4096
+	RMW	2
+	CPD	#3
+DOS:	DB	3
+	RMB	1
+SIETE:	EQU	7
+	CPD	1,X
+	CPD	256,X
+	CPD	4096,X
+OCHO:	DS.B	1
+	CPD	[4096,X]
+	BLE	UNO
+	LBLE	DOS
+NUEVE:	EQU	9
+;comentario adicional
+	TXS
+DIEZ:	FCB	$03
+	FDB	$03
+	FCC	"SSPTL!"
+	END
