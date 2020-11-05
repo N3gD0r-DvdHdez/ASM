@@ -201,12 +201,14 @@ public class Files {
 				}
 
 			} else {
+				String tmp = cutData(instr, conv);
+				String [] s1reg = tmp.split("\t");
 
-				this.objLines += "\n";
+				this.objLines = s1reg[1];
 
 				this.dir = instr.getContloc();
 
-				this.data = instr.getCodMaq();
+				this.data = s1reg[0];
 
 				int size = getLen(this.dir + this.data) + 1;
 				len = conv.append(Integer.toHexString(size), 2).toUpperCase();
@@ -232,6 +234,39 @@ public class Files {
 	private int getLen(String data) {
 		String [] tmp = data.split("(?<=\\G..)");
 		return tmp.length;
+	}
+
+	private String cutData(Instruccion instr, Bases conv) {
+		String dat = "";
+
+		String tmp = "";
+		String cut = "";
+
+		String [] pairs = (this.data + instr.getCodMaq()).split("(?<=\\G..)");
+
+		for(int i = 0; i < pairs.length; i++) {
+			tmp += pairs[i];
+
+			if(tmp.length() / 2 > 16) {
+				cut += pairs[i];
+			} else {
+				dat += pairs[i];
+			}
+		}
+
+		int size = getLen(this.dir + dat) + 1;
+		String len = conv.append(Integer.toHexString(size), 2).toUpperCase();
+
+		String checksum = Integer.toHexString(~getCheckSum(len + this.dir + dat)).toUpperCase();
+		checksum = conv.c2(checksum, 2);
+
+		StringBuilder tmpl = new StringBuilder(this.objLines.toString());
+			
+		int pS = this.objLines.toString().lastIndexOf('S') + 2;
+		
+		tmpl.delete(pS, this.objLines.length());
+
+		return cut + "\t" + tmpl.toString() + len + this.dir + dat + checksum + "\n";
 	}
 
 
